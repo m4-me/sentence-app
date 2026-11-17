@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>صانع الجمل الذكي</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&family=Inter:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#edf2f6;--sf:#fff;--sf2:#e4ebf2;--ink:#13243a;--mut:#53657a;--line:#cfdae5;--ok:#1d8f62;--okbg:#dff3ea;--bad:#c2410c;--badbg:#fde8dc;--acc:#16324f;--onacc:#fff;--bronze:#b9772f;--silver:#7f8c9b;--gold:#c8921f;--dia:#2f6fdb;
+--S:#2f6fdb;--V:#1d8f62;--O:#c8821f;--A:#8a5cd6;--J:#d0488b;--X:#0f8f9a;--P:#5c6f86;--Q:#d1572b;--D:#7a8a3a;color-scheme:light}
+:root[data-theme="dark"]{--bg:#0c1622;--sf:#13243a;--sf2:#1a3250;--ink:#e9f0f7;--mut:#9fb2c6;--line:#27405e;--ok:#4cd39b;--okbg:#12362f;--bad:#ff9d6b;--badbg:#3a2418;--acc:#4cd39b;--onacc:#06241a;--bronze:#e0a263;--silver:#aab6c4;--gold:#f0c35a;--dia:#6ea0ff;--S:#6ea0ff;--V:#4cd39b;--O:#f0b35a;--A:#b79bff;--J:#ff7fb8;--X:#4ed2de;--P:#9fb2c6;--Q:#ff936b;--D:#b8c96a;color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.7 'Cairo','Segoe UI',Tahoma,sans-serif;padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
+header{position:sticky;top:0;z-index:9;background:var(--sf);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;padding:10px 16px}
+header h1{margin:0;font-size:1.25rem;font-weight:800;flex:1;cursor:pointer}
+header h1 small{display:block;font:500 .72rem 'Inter',sans-serif;color:var(--mut)}
+.ib{border:1px solid var(--line);background:var(--sf2);color:var(--ink);border-radius:10px;min-height:40px;padding:0 12px;font:600 .85rem 'Cairo',sans-serif;cursor:pointer}
+main{max-width:760px;margin:0 auto;padding:18px 16px 48px}
+h2{font-size:1.3rem;margin:.2em 0 .4em;font-weight:800}
+p{margin:.3em 0}.mut{color:var(--mut);font-size:.92rem}
+.card{background:var(--sf);border:1px solid var(--line);border-radius:16px;padding:16px;margin:14px 0}
+.bar{height:10px;background:var(--sf2);border-radius:9px;overflow:hidden;margin-top:8px}
+.bar i{display:block;height:100%;background:var(--ok);border-radius:9px;transition:width .4s}
+.lvl{border-inline-start:6px solid var(--tier)}.lvl.lock{opacity:.78;background:var(--sf2)}
+.lvl h3{margin:0;font-size:1.1rem;font-weight:800;display:flex;gap:8px;align-items:center}
+.medal{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--tier);color:#fff;font:700 .95rem 'Inter',sans-serif}
+.btn{border:0;border-radius:12px;min-height:46px;padding:0 20px;font:700 1rem 'Cairo',sans-serif;background:var(--acc);color:var(--onacc);cursor:pointer}
+.btn.sec{background:var(--sf2);color:var(--ink);border:1px solid var(--line)}.btn:disabled{opacity:.45}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.msg{background:var(--sf2);border-radius:12px;padding:10px 14px;margin-top:10px;font-size:.93rem}
+.en{font-family:'Inter',system-ui,sans-serif;direction:ltr;unicode-bidi:isolate}
+.sent{display:flex;flex-wrap:wrap;gap:8px;direction:ltr;margin:10px 0}
+.tag{font:700 1.2rem 'Inter',sans-serif;padding:6px 12px;border-radius:10px;border-bottom:4px solid var(--c);background:color-mix(in srgb,var(--c) 14%,var(--sf))}
+.tag.miss{--c:var(--bad)}
+.part{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--line)}.part:first-child{border-top:0}
+.part .tag{font-size:1rem;flex:none}.part b{color:var(--c)}
+.zone{display:flex;flex-wrap:wrap;gap:8px;min-height:68px;padding:12px;border-radius:14px;margin:10px 0}
+.ans{border:2px dashed var(--line);background:var(--sf)}.ans.ok{border:2px solid var(--ok);background:var(--okbg)}.ans.bad{border:2px solid var(--bad);background:var(--badbg)}
+.bank{background:var(--sf2)}.ph{color:var(--mut);font-size:.9rem;align-self:center}
+.chip{font:700 1.1rem 'Inter',sans-serif;padding:9px 16px;min-height:46px;border-radius:12px;border:1.5px solid var(--line);border-bottom-width:4px;background:var(--sf);color:var(--ink);cursor:grab}
+.fb{margin-top:10px;padding:10px 14px;border-radius:12px;font-weight:600;white-space:pre-wrap}
+.fb.ok{background:var(--okbg);color:var(--ok)}.fb.bad{background:var(--badbg);color:var(--bad)}.fb.ex{background:var(--sf2);color:var(--ink);font-weight:400}
+input{width:100%;min-height:44px;border-radius:10px;border:1px solid var(--line);background:var(--sf);color:var(--ink);padding:0 12px;font:500 .95rem 'Inter',sans-serif;direction:ltr;margin:4px 0 10px}
+.mic{font-size:1.1rem}.pulse{animation:p 1s infinite}@keyframes p{50%{opacity:.4}}
+button:focus-visible,input:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header>
+  <h1 data-act="home">صانع الجمل الذكي<small>Sentence Builder AI</small></h1>
+  <button class="ib" data-act="theme">الوضع</button>
+</header>
+<main id="app"></main>
+<script>
+const ROLES={S:'الفاعل',V:'الفعل',O:'المفعول به',A:'ظرف',J:'صفة',X:'فعل مساعد أو نفي',P:'جار ومجرور',Q:'أداة سؤال',D:'محدِّد'};
+const GOAL=5,TIERS=['var(--bronze)','var(--silver)','var(--gold)','var(--dia)'];
+const LV=[
+{t:'الجملة الأساسية',d:'فاعل + فعل + مفعول به',p:'Simple present, subject + verb + object, 3 to 4 short words, everyday vocabulary'},
+{t:'الصفات والظروف',d:'الزمان والمكان والوصف',p:'Simple present with time adverbs, adjectives, and place prepositions, 5 to 7 words'},
+{t:'النفي والأسئلة',d:'do وdoes وأدوات الاستفهام',p:'Present simple negatives with do not and does not, yes/no questions, and wh- questions'},
+{t:'الماضي والمستقبل',d:'ed وwill وgoing to',p:'Past simple, future with will and going to, and past continuous'}];
+const $app=document.getElementById('app');
+let S=Object.assign({key:'',model:'gemini-flash-latest',level:1,prog:{1:0,2:0,3:0,4:0},seen:[],theme:''},ld());
+let V={name:'home'},cur=null,B=null,sp=null,err='',tok=0;
+function ld(){try{return JSON.parse(localStorage.getItem('sb_ai_v1'))||{}}catch(e){return{}}}
+function sv(){try{localStorage.setItem('sb_ai_v1',JSON.stringify(S))}catch(e){}}
+function theme(){document.documentElement.dataset.theme=S.theme||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light')}
+const open=n=>n===1||(S.prog[n-1]||0)>=GOAL;
+function shuffle(a){const r=a.slice();do{for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]]}}while(r.length>1&&r.every((x,i)=>x===a[i]));return r}
+function go(n){V={name:n};render();window.scrollTo(0,0)}
+function busy(m){V={name:'busy',m};render()}
+const tag=(w,r,c)=>`<span class="tag ${c||''}" style="--c:var(--${r||'P'})">${w}</span>`;
+
+async function gem(prompt,json){
+  if(!S.key)throw new Error('أدخل مفتاح Gemini أولًا من الصفحة الرئيسية.');
+  const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(S.model)}:generateContent`,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':S.key},body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:json?{responseMimeType:'application/json',temperature:1}:{temperature:.4}})});
+  const d=await r.json().catch(()=>({}));
+  if(!r.ok)throw new Error((d.error&&d.error.message)||'خطأ من Gemini ('+r.status+')');
+  const t=d.candidates&&d.candidates[0]&&d.candidates[0].content&&d.candidates[0].content.parts.map(p=>p.text||'').join('');
+  if(!t)throw new Error('رد فارغ من النموذج.');return t}
+
+async function fresh(){
+  err='';busy('جارٍ إنشاء جملة جديدة…');
+  const p=`You are an English teacher for an Arabic-speaking learner. Level: ${LV[S.level-1].p}. Create ONE new correct, natural English sentence. No contractions. Do not repeat or closely resemble: ${S.seen.slice(-12).join(' | ')||'none'}.
+Return only JSON: {"en":"the sentence with final punctuation","ar":"Arabic translation","parts":[{"w":"word","role":"S|V|O|A|J|X|P|Q|D","why":"one short Arabic sentence explaining why this word is placed here"}]}.
+Every word of the sentence must appear exactly once in parts, in order, without punctuation. Roles: S subject, V main verb, O object, A adverb, J adjective, X auxiliary or negation, P preposition phrase word, Q question word, D determiner.`;
+  for(let k=0;k<3;k++){
+    try{
+      const o=JSON.parse((await gem(p,true)).replace(/```json|```/g,'').trim());
+      const ok=o.en&&o.ar&&Array.isArray(o.parts)&&o.parts.length>1&&o.parts.every(x=>x.w&&ROLES[x.role]&&x.why)&&o.parts.map(x=>x.w).join(' ').toLowerCase()===o.en.replace(/[.?!,]/g,'').replace(/\s+/g,' ').trim().toLowerCase();
+      if(ok){cur=o;S.seen=[...S.seen,o.en].slice(-15);sv();sp=null;return go('study')}
+      err='الجملة المولَّدة لم تجتز الفحص، جرّب مرة أخرى.';
+    }catch(e){err=e.message;if(/key|API|quota|permission|أدخل/i.test(e.message))break}
+  }
+  go('home')}
+
+function newB(){B={toks:cur.parts.map(x=>x.w),bank:[],ans:[],st:null,lock:0,tries:0,exp:''};B.bank=shuffle(B.toks.map((_,i)=>i))}
+function place(id,zone,before){
+  B.bank=B.bank.filter(x=>x!==id);B.ans=B.ans.filter(x=>x!==id);
+  if(zone==='ans'){const k=before!=null?B.ans.indexOf(before):-1;if(k>=0)B.ans.splice(k,0,id);else B.ans.push(id)}else B.bank.push(id);
+  B.st=null;render()}
+async function check(){
+  const g=B.ans.map(i=>B.toks[i]);
+  if(g.length<B.toks.length){B.st='bad';B.exp='رتّب كل الكلمات أولًا.';return render()}
+  if(g.every((w,i)=>w===B.toks[i])){
+    B.st='ok';B.lock=1;B.exp='';
+    if(B.tries===0){S.prog[S.level]=(S.prog[S.level]||0)+1;sv()}
+    return render()}
+  B.st='bad';B.tries++;B.exp='جارٍ تحليل الخطأ…';render();
+  const me=B;
+  try{
+    me.exp=await gem(`An Arabic-speaking learner is building an English sentence from scrambled words.
+Correct sentence: "${cur.en}"
+Learner's order: "${g.join(' ')}"
+In simple Arabic, in at most 5 short lines and with no markdown symbols: (1) say which word is in the wrong place, (2) explain why it is wrong using the grammar rule, (3) explain where it should go and why. Do not reveal the full correct sentence; guide them to fix it.`,false)
+  }catch(e){me.exp='تعذّر الشرح: '+e.message}
+  if(B===me)render()}
+
+const norm=s=>s.toLowerCase().replace(/[^a-z\s']/g,'').trim().split(/\s+/).filter(Boolean);
+function say(t){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='en-US';u.rate=.85;speechSynthesis.speak(u)}catch(e){}}
+function listen(){
+  const Rc=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!Rc){sp={st:'err',m:'هذا المتصفح لا يدعم التعرف على الصوت. استخدم Chrome أو Edge.'};return render()}
+  const r=new Rc();r.lang='en-US';r.maxAlternatives=1;let got=0;
+  r.onresult=async e=>{
+    got=1;const heard=e.results[0][0].transcript,pool=norm(heard),miss=[];
+    norm(cur.en).forEach(w=>{const i=pool.indexOf(w);if(i>=0)pool.splice(i,1);else miss.push(w)});
+    const me=sp={st:'done',heard,miss,exp:miss.length?'جارٍ تحليل النطق…':''};render();
+    if(miss.length){
+      try{me.exp=await gem(`The learner is an Arabic speaker practicing English pronunciation.
+Target sentence: "${cur.en}"
+Speech recognition heard: "${heard}"
+Words not recognized: ${miss.join(', ')}.
+In simple Arabic, at most 6 short lines, no markdown symbols: for each missed word explain the likely pronunciation problem for Arabic speakers (such as p/b, v/f, th, short vowels, final s or ed, stress), give how to say it with a simple Latin hint and an Arabic approximation, and add one practice tip. Mention briefly that this is based on speech-to-text and not a direct audio analysis.`,false)}catch(x){me.exp='تعذّر الشرح: '+x.message}
+      if(sp===me)render()}};
+  r.onerror=e=>{got=1;sp={st:'err',m:'تعذّر التسجيل ('+e.error+'). تأكد من السماح بالميكروفون.'};render()};
+  r.onend=()=>{if(!got){sp={st:'err',m:'لم أسمع شيئًا. اضغط وأعد المحاولة.'};render()}};
+  sp={st:'rec'};render();try{r.start()}catch(e){}}
+
+function render(){$app.innerHTML=({home,busy:()=>`<div class="card"><p class="pulse">${V.m}</p></div>`,study,build,speak}[V.name])()}
+function home(){
+  let h=`<h2>تعلّم الجمل الإنجليزية بالتفكيك والتركيب</h2><p class="mut">يولّد Gemini جملة جديدة، يشرحها، ثم يصحّح تركيبك ونطقك ويبيّن أين أخطأت ولماذا.</p>`;
+  if(err)h+=`<div class="fb bad">${err}</div>`;
+  h+=`<details class="card" ${S.key?'':'open'}><summary><b>إعدادات Gemini</b></summary><p class="mut">المفتاح يبقى في متصفحك فقط (من Google AI Studio). اسم النموذج قابل للتعديل إذا تغيّر.</p>
+  <label>مفتاح API</label><input id="key" type="password" value="${S.key}" placeholder="AIza…"><label>اسم النموذج</label><input id="model" value="${S.model}">
+  <button class="btn" data-act="savekey">حفظ</button></details>`;
+  LV.forEach((l,i)=>{
+    const n=i+1,o=open(n),pg=Math.min(S.prog[n]||0,GOAL);
+    h+=`<div class="card lvl ${o?'':'lock'}" style="--tier:${TIERS[i]}"><h3><span class="medal">${o?n:'🔒'}</span>المستوى ${n}: ${l.t}</h3><p class="mut">${l.d}</p>`;
+    if(!o)h+=`<div class="msg">🔒 أتقن المستوى ${n-1} بتركيب ${GOAL} جمل من المحاولة الأولى لتفتح هذا المستوى.</div>`;
+    else h+=`<div class="bar"><i style="width:${pg/GOAL*100}%"></i></div><p class="mut">الإتقان: ${pg} من ${GOAL}${pg>=GOAL?' ✅':''}</p><div class="row"><button class="btn" data-act="start" data-n="${n}">جملة جديدة</button></div>`;
+    h+='</div>'});
+  return h}
+function study(){
+  const used=[...new Set(cur.parts.map(x=>x.role))];
+  return `<p class="mut">المستوى ${S.level} · الخطوة 1: التفكيك</p>
+  <div class="card"><div class="sent">${cur.parts.map(x=>tag(x.w,x.role)).join('')}</div><p class="en" style="font-size:1.05rem">${cur.en}</p><p>${cur.ar}</p>
+  <div class="row"><button class="btn sec" data-act="say">🔊 استمع</button></div></div>
+  <div class="card"><h2>لماذا وُضعت كل كلمة هنا؟</h2>${cur.parts.map(x=>`<div class="part">${tag(x.w,x.role)}<div style="--c:var(--${x.role})"><b>${ROLES[x.role]}</b><p>${x.why}</p></div></div>`).join('')}</div>
+  <div class="row"><button class="btn" data-act="build">ابدأ التركيب</button><button class="btn sec" data-act="start" data-n="${S.level}">جملة أخرى</button></div>`}
+function builder(){
+  const c=id=>`<button class="chip" draggable="${!B.lock}" data-id="${id}" data-act="${B.ans.includes(id)?'unpick':'pick'}" dir="ltr">${B.toks[id]}</button>`;
+  return `<div class="zone ans ${B.st||''}" data-zone="ans" dir="ltr">${B.ans.length?B.ans.map(c).join(''):'<span class="ph" dir="rtl">اضغط على الكلمات أو اسحبها إلى هنا</span>'}</div><div class="zone bank" data-zone="bank" dir="ltr">${B.bank.map(c).join('')}</div>`}
+function build(){
+  const pg=S.prog[S.level]||0;
+  return `<p class="mut">المستوى ${S.level} · الخطوة 2: التركيب</p><div class="card"><h2>ركّب الجملة</h2><p>${cur.ar}</p>${builder()}
+  ${B.st==='ok'?`<div class="fb ok">أحسنت! <span class="en">${cur.en}</span>${B.tries?'':'\nمن المحاولة الأولى ✅'}${pg===GOAL&&!B.tries&&S.level<4?`\n🏅 أتقنت المستوى ${S.level} وفُتح المستوى التالي.`:''}</div>`:''}
+  ${B.st==='bad'?`<div class="fb bad">${B.exp}</div>`:''}
+  <div class="row">${B.lock?`<button class="btn" data-act="speak">🎤 انطق الجملة</button><button class="btn sec" data-act="start" data-n="${S.level}">جملة جديدة</button>`:`<button class="btn" data-act="check">تحقق</button><button class="btn sec" data-act="clear">مسح</button><button class="btn sec" data-act="study">أعد الشرح</button>`}</div></div>`}
+function speak(){
+  let h=`<p class="mut">الخطوة 3: النطق</p><div class="card"><div class="sent">${cur.parts.map(x=>tag(x.w,x.role,sp&&sp.miss&&sp.miss.includes(x.w.toLowerCase().replace(/[^a-z']/g,''))?'miss':'')).join('')}</div>
+  <div class="row"><button class="btn sec" data-act="say">🔊 استمع</button><button class="btn" data-act="listen" ${sp&&sp.st==='rec'?'disabled':''}><span class="mic ${sp&&sp.st==='rec'?'pulse':''}">🎤</span> ${sp&&sp.st==='rec'?'أسمعك…':'اضغط وانطق الجملة'}</button></div>`;
+  if(sp&&sp.st==='err')h+=`<div class="fb bad">${sp.m}</div>`;
+  if(sp&&sp.st==='done'){
+    h+=`<p class="mut">سمعتُ: <span class="en">${sp.heard}</span></p>`;
+    h+=sp.miss.length?`<div class="fb bad">الكلمات غير الواضحة: ${sp.miss.join('، ')}</div><div class="fb ex">${sp.exp}</div>`:`<div class="fb ok">نطق واضح! كل الكلمات فُهمت ✅</div>`}
+  return h+`<div class="row"><button class="btn sec" data-act="start" data-n="${S.level}">جملة جديدة</button><button class="btn sec" data-act="home">الرئيسية</button></div></div>`}
+
+$app.addEventListener('dragstart',e=>{const c=e.target.closest('[data-id]');if(c&&B&&!B.lock)e.dataTransfer.setData('text/plain',c.dataset.id)});
+$app.addEventListener('dragover',e=>{if(e.target.closest('[data-zone]'))e.preventDefault()});
+$app.addEventListener('drop',e=>{const z=e.target.closest('[data-zone]');if(!z||!B||B.lock)return;e.preventDefault();const id=parseInt(e.dataTransfer.getData('text/plain'),10);if(isNaN(id))return;const b=e.target.closest('[data-id]');place(id,z.dataset.zone,b?+b.dataset.id:null)});
+document.addEventListener('click',e=>{
+  const el=e.target.closest('[data-act]');if(!el)return;const a=el.dataset.act;
+  if(a==='home'){err='';go('home')}
+  else if(a==='theme'){S.theme=document.documentElement.dataset.theme==='dark'?'light':'dark';theme();sv()}
+  else if(a==='savekey'){S.key=document.getElementById('key').value.trim();S.model=document.getElementById('model').value.trim()||'gemini-flash-latest';sv();err='';render()}
+  else if(a==='start'){S.level=+el.dataset.n;sv();fresh()}
+  else if(a==='study'){go('study')}
+  else if(a==='build'){newB();go('build')}
+  else if(a==='say'){say(cur.en)}
+  else if(a==='speak'){sp=null;go('speak')}
+  else if(a==='listen'){listen()}
+  else if(a==='pick'&&B&&!B.lock){place(+el.dataset.id,'ans',null)}
+  else if(a==='unpick'&&B&&!B.lock){place(+el.dataset.id,'bank',null)}
+  else if(a==='clear'&&B&&!B.lock){B.bank=shuffle(B.toks.map((_,k)=>k));B.ans=[];B.st=null;render()}
+  else if(a==='check'){check()}
+});
+theme();render();
+</script>
+</body>
+</html>
